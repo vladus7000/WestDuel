@@ -1,0 +1,194 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{1B316A6D-0432-4199-AE5C-24D754E10CF1}</ProjectGuid>
+    <RootNamespace>Dx11</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir);C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;$(ProjectDir)\Engine;$(ProjectDir)\Game;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>false</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir);C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;$(ProjectDir)\Engine;$(ProjectDir)\Game;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x64</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d11.lib;d3dx11d.lib;D3DCompiler.lib;dxerr.lib;dxgi.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir);C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;$(ProjectDir)\Engine;$(ProjectDir)\Game;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>false</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir);C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;$(ProjectDir)\Engine;$(ProjectDir)\Game;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x64</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d11.lib;d3dx11d.lib;D3DCompiler.lib;dxerr.lib;dxgi.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Engine\Render\GBuffer.cpp" />
+    <ClCompile Include="Engine\Render\Light.cpp" />
+    <ClCompile Include="Engine\Render\Passes\Bloom\Bloom.cpp" />
+    <ClCompile Include="Engine\Render\Passes\FinalPost\FinalPost.cpp" />
+    <ClCompile Include="Engine\Render\Passes\GenerateGBuffer\GenerateGbuffer.cpp" />
+    <ClCompile Include="Engine\Render\Passes\GenerateShadowMaps\GenerateShadowMaps.cpp" />
+    <ClCompile Include="Engine\Render\Passes\LitGBuffer\LitGBufferCS.cpp" />
+    <ClCompile Include="Engine\Render\Passes\LitGBuffer\LitGBufferPS.cpp" />
+    <ClCompile Include="Engine\Render\Passes\MainZpass\MainZpass.cpp" />
+    <ClCompile Include="Engine\Render\Passes\SkyBox\SkyAndFog.cpp" />
+    <ClCompile Include="Engine\Render\Passes\SpotlightSM\SpotlightSM.cpp" />
+    <ClCompile Include="Engine\Render\Passes\SSAO\SSAO.cpp" />
+    <ClCompile Include="Engine\Render\Passes\SSR\SSR.cpp" />
+    <ClCompile Include="Engine\Render\Passes\Tonemap\LuminanceAvg.cpp" />
+    <ClCompile Include="Engine\Render\Renderer.cpp" />
+    <ClCompile Include="Engine\Render\Resources.cpp" />
+    <ClCompile Include="Engine\Render\Shader.cpp" />
+    <ClCompile Include="Engine\Render\Texture.cpp" />
+    <ClCompile Include="Engine\UI\UI.cpp" />
+    <ClCompile Include="Engine\Window.cpp" />
+    <ClCompile Include="Engine\World.cpp" />
+    <ClCompile Include="Engine\main.cpp" />
+    <ClCompile Include="Game\WestDuel.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Engine\Application.hpp" />
+    <ClInclude Include="Engine\Camera.hpp" />
+    <ClInclude Include="Engine\Engine.hpp" />
+    <ClInclude Include="Engine\Render\ConstantBuffer.hpp" />
+    <ClInclude Include="Engine\Render\GBuffer.hpp" />
+    <ClInclude Include="Engine\Render\Light.hpp" />
+    <ClInclude Include="Engine\Render\Pass.hpp" />
+    <ClInclude Include="Engine\Render\Passes\Bloom\Bloom.hpp" />
+    <ClInclude Include="Engine\Render\Passes\FinalPost\FinalPost.hpp" />
+    <ClInclude Include="Engine\Render\Passes\GenerateGBuffer\GenerateGbuffer.hpp" />
+    <ClInclude Include="Engine\Render\Passes\GenerateShadowMaps\GenerateShadowMaps.hpp" />
+    <ClInclude Include="Engine\Render\Passes\LitGBuffer\LitGBufferCS.hpp" />
+    <ClInclude Include="Engine\Render\Passes\LitGBuffer\LitGBufferPS.hpp" />
+    <ClInclude Include="Engine\Render\Passes\MainZpass\MainZpass.hpp" />
+    <ClInclude Include="Engine\Render\Passes\SkyBox\SkyAndFog.hpp" />
+    <ClInclude Include="Engine\Render\Passes\SpotlightSM\SpotlightSM.hpp" />
+    <ClInclude Include="Engine\Render\Passes\SSAO\SSAO.hpp" />
+    <ClInclude Include="Engine\Render\Passes\SSR\SSR.hpp" />
+    <ClInclude Include="Engine\Render\Passes\Tonemap\LuminanceAvg.hpp" />
+    <ClInclude Include="Engine\Render\Renderer.hpp" />
+    <ClInclude Include="Engine\Render\Resources.hpp" />
+    <ClInclude Include="Engine\Settings.hpp" />
+    <ClInclude Include="Engine\SettingsHolder.hpp" />
+    <ClInclude Include="Engine\Settings\RenderSettings.hpp" />
+    <ClInclude Include="Engine\Settings\WorldSettings.hpp" />
+    <ClInclude Include="Engine\Render\Shader.hpp" />
+    <ClInclude Include="Engine\Render\Texture.hpp" />
+    <ClInclude Include="Engine\ThirdParty\stb_image.h" />
+    <ClInclude Include="Engine\ThirdParty\tiny_obj_loader.h" />
+    <ClInclude Include="Engine\UI\nuklear.h" />
+    <ClInclude Include="Engine\UI\nuklear_d3d11.h" />
+    <ClInclude Include="Engine\UI\nuklear_d3d11_pixel_shader.h" />
+    <ClInclude Include="Engine\UI\nuklear_d3d11_vertex_shader.h" />
+    <ClInclude Include="Engine\UI\UI.hpp" />
+    <ClInclude Include="Engine\Window.hpp" />
+    <ClInclude Include="Engine\World.hpp" />
+    <ClInclude Include="Game\WestDuel.hpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

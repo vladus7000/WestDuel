@@ -1,0 +1,249 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Engine\UI\UI.cpp">
+      <Filter>Engine\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\main.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\Passes\Bloom\Bloom.cpp">
+      <Filter>Engine\Render\Passes\Bloom</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\Passes\FinalPost\FinalPost.cpp">
+      <Filter>Engine\Render\Passes\FinalPost</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\GBuffer.cpp">
+      <Filter>Engine\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\Passes\GenerateGBuffer\GenerateGbuffer.cpp">
+      <Filter>Engine\Render\Passes\GenerateGBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\Passes\GenerateShadowMaps\GenerateShadowMaps.cpp">
+      <Filter>Engine\Render\Passes\GenerateShadowMaps</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\Light.cpp">
+      <Filter>Engine\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\Passes\LitGBuffer\LitGBufferCS.cpp">
+      <Filter>Engine\Render\Passes\LitGBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\Passes\LitGBuffer\LitGBufferPS.cpp">
+      <Filter>Engine\Render\Passes\LitGBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\Passes\Tonemap\LuminanceAvg.cpp">
+      <Filter>Engine\Render\Passes\Tonemap</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\Passes\MainZpass\MainZpass.cpp">
+      <Filter>Engine\Render\Passes\MainZpass</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\Renderer.cpp">
+      <Filter>Engine\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\Resources.cpp">
+      <Filter>Engine\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\Shader.cpp">
+      <Filter>Engine\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\Passes\SkyBox\SkyAndFog.cpp">
+      <Filter>Engine\Render\Passes\SkyBox</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\Passes\SpotlightSM\SpotlightSM.cpp">
+      <Filter>Engine\Render\Passes\SpotlightSM</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\Passes\SSAO\SSAO.cpp">
+      <Filter>Engine\Render\Passes\SSAO</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\Passes\SSR\SSR.cpp">
+      <Filter>Engine\Render\Passes\SSR</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\Texture.cpp">
+      <Filter>Engine\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Window.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\World.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\WestDuel.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Engine\Settings\RenderSettings.hpp">
+      <Filter>Engine\Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Settings\WorldSettings.hpp">
+      <Filter>Engine\Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\ThirdParty\tiny_obj_loader.h">
+      <Filter>Engine\ThirdParty</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\UI\nuklear.h">
+      <Filter>Engine\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\UI\nuklear_d3d11.h">
+      <Filter>Engine\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\UI\nuklear_d3d11_pixel_shader.h">
+      <Filter>Engine\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\UI\nuklear_d3d11_vertex_shader.h">
+      <Filter>Engine\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\UI\UI.hpp">
+      <Filter>Engine\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\ThirdParty\stb_image.h">
+      <Filter>Engine\ThirdParty</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\Passes\Bloom\Bloom.hpp">
+      <Filter>Engine\Render\Passes\Bloom</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\ConstantBuffer.hpp">
+      <Filter>Engine\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Camera.hpp">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\Passes\FinalPost\FinalPost.hpp">
+      <Filter>Engine\Render\Passes\FinalPost</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\GBuffer.hpp">
+      <Filter>Engine\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\Passes\GenerateGBuffer\GenerateGbuffer.hpp">
+      <Filter>Engine\Render\Passes\GenerateGBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\Passes\GenerateShadowMaps\GenerateShadowMaps.hpp">
+      <Filter>Engine\Render\Passes\GenerateShadowMaps</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\Light.hpp">
+      <Filter>Engine\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\Passes\LitGBuffer\LitGBufferCS.hpp">
+      <Filter>Engine\Render\Passes\LitGBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\Passes\LitGBuffer\LitGBufferPS.hpp">
+      <Filter>Engine\Render\Passes\LitGBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\Passes\Tonemap\LuminanceAvg.hpp">
+      <Filter>Engine\Render\Passes\Tonemap</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\Passes\MainZpass\MainZpass.hpp">
+      <Filter>Engine\Render\Passes\MainZpass</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\Pass.hpp">
+      <Filter>Engine\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\Renderer.hpp">
+      <Filter>Engine\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\Resources.hpp">
+      <Filter>Engine\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\Shader.hpp">
+      <Filter>Engine\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\Passes\SkyBox\SkyAndFog.hpp">
+      <Filter>Engine\Render\Passes\SkyBox</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\Passes\SpotlightSM\SpotlightSM.hpp">
+      <Filter>Engine\Render\Passes\SpotlightSM</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\Passes\SSAO\SSAO.hpp">
+      <Filter>Engine\Render\Passes\SSAO</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\Passes\SSR\SSR.hpp">
+      <Filter>Engine\Render\Passes\SSR</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\Texture.hpp">
+      <Filter>Engine\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Window.hpp">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\World.hpp">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Settings.hpp">
+      <Filter>Engine\Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\SettingsHolder.hpp">
+      <Filter>Engine\Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Engine.hpp">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\WestDuel.hpp">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application.hpp">
+      <Filter>Engine</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{2a886f3d-396e-483b-918b-e9b5e6834f8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{ac42acae-727e-4aaf-ad33-4d914b6b93a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Render">
+      <UniqueIdentifier>{7b7e0b07-3c28-4080-a57f-0b7e31049fd5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\UI">
+      <UniqueIdentifier>{4ca83f26-6dff-44ea-a060-ece45bf2c818}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Input">
+      <UniqueIdentifier>{2885729e-909c-4c78-bf32-5b5408a74917}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Physics">
+      <UniqueIdentifier>{023e680f-5b63-4b30-8379-38c0bd8b2882}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Settings">
+      <UniqueIdentifier>{083f20e4-1c99-43fe-8f4a-30b2b15bd912}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\ThirdParty">
+      <UniqueIdentifier>{7f4324be-4c6a-4927-9f2c-d2ab77cb26bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Render\Passes">
+      <UniqueIdentifier>{acd15c5b-7a05-4798-a317-840c389f4824}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Render\Passes\Bloom">
+      <UniqueIdentifier>{48bfb20e-bfde-4a25-aaaa-f482418356e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Render\Passes\FinalPost">
+      <UniqueIdentifier>{d0ea16d4-ac21-47e1-91e6-887805b76d6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Render\Passes\GenerateGBuffer">
+      <UniqueIdentifier>{982bc918-6fbe-4e8d-8860-88c46263302a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Render\Passes\GenerateShadowMaps">
+      <UniqueIdentifier>{0670c7ed-b8c7-4e23-9962-775c8b9f0628}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Render\Passes\LitGBuffer">
+      <UniqueIdentifier>{8cc9373b-6b96-4431-b20c-acbe050160b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Render\Passes\MainZpass">
+      <UniqueIdentifier>{7e00f93e-fc22-4063-9659-f150e8caeee9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Render\Passes\SkyBox">
+      <UniqueIdentifier>{c4b033be-a271-4889-9037-644ffaf995a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Render\Passes\SpotlightSM">
+      <UniqueIdentifier>{acd28c6e-6075-43a4-b812-78ae5b58519a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Render\Passes\SSAO">
+      <UniqueIdentifier>{a5ef0c23-df75-4cc4-8d89-ed7bc10c51b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Render\Passes\SSR">
+      <UniqueIdentifier>{b0c1e67e-ed5d-4e35-bf5c-c51e97678273}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Render\Passes\Tonemap">
+      <UniqueIdentifier>{8a840e4b-c9f4-4d80-a00f-70bc6a28b9e3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
