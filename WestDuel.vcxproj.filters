@@ -197,9 +197,6 @@
     <Filter Include="Engine\UI">
       <UniqueIdentifier>{4ca83f26-6dff-44ea-a060-ece45bf2c818}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Input">
-      <UniqueIdentifier>{2885729e-909c-4c78-bf32-5b5408a74917}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Physics">
       <UniqueIdentifier>{023e680f-5b63-4b30-8379-38c0bd8b2882}</UniqueIdentifier>
     </Filter>

@@ -14,89 +14,6 @@ CREATE_GAME_IMPL(WestDuel);
 
 Camera g_mainCamera;
 
-bool mouseButtonPressed;
-int lastX = 0;
-int lastY = 0;
-
-#define GET_Y_LPARAM(lp) ((int)(short)HIWORD(lp))
-#define GET_X_LPARAM(lp) ((int)(short)LOWORD(lp))
-
-LRESULT UserFunc(HWND hwnd, UINT msg,
-    WPARAM wParam, LPARAM lParam)
-{
-    uiInput(hwnd, msg, wParam, lParam);
-    //	return 0;
-
-    const float dt = 1.0f / 60.0f;
-    const float speed = dt * 50.0f;
-    switch (msg) {
-
-    case WM_PAINT:
-        break;
-    case WM_LBUTTONDOWN:
-    {
-        mouseButtonPressed = true;
-        POINT pt;
-        pt.x = 400;
-        pt.y = 300;
-        ClientToScreen(hwnd, &pt);
-        SetCursorPos(pt.x, pt.y);
-        ShowCursor(false);
-        return 0;
-    }
-    break;
-    case WM_LBUTTONUP:
-        mouseButtonPressed = false;
-        ShowCursor(true);
-        return 0;
-        break;
-    case WM_MOUSELEAVE:
-        mouseButtonPressed = false;
-        ShowCursor(true);
-        break;
-    case WM_KEYDOWN:
-        if (wParam == 'P')
-        {
-            auto set = SettingsHolder::getInstance().getSetting<WorldSettings>(Settings::Type::World);
-            set->pause = !set->pause;
-            return 0L;
-        }
-        if (wParam == 'C')
-        {
-            auto set = SettingsHolder::getInstance().getSetting<RenderSettings>(Settings::Type::Render);
-            set->useCSforLighting = !set->useCSforLighting;
-            return 0L;
-        }
-        break;
-    case WM_MOUSEMOVE:
-        if (mouseButtonPressed)
-        {
-            int X = GET_X_LPARAM(lParam);
-            int Y = GET_Y_LPARAM(lParam);
-
-            const float mouseSpeed = 10.0f * dt;
-            float dx = float(X - 400) * mouseSpeed;
-            float dy = float(300 - Y) * mouseSpeed;
-
-            static float yaw = 0.0f;
-            static float pitch = 0.0f;
-            yaw += -dx;
-            pitch += -dy;
-
-            g_mainCamera.rotate(pitch, yaw);
-            POINT pt;
-            pt.x = 400;
-            pt.y = 300;
-            ClientToScreen(hwnd, &pt);
-            SetCursorPos(pt.x, pt.y);
-        }
-        return 0;
-        break;
-    }
-
-    return 1;
-}
-
 WestDuel::WestDuel()
 {
 }
@@ -112,7 +29,12 @@ void WestDuel::engineStared(EngineComponents engine)
     auto& mainWorld = *engine.world;
     auto& mainWindow = *engine.window;
 
-    engine.window->setUserFunction(UserFunc);
+    m_engine.window->setStickCursorToCenter(true);
+    m_engine.window->setCursorVisibility(false);
+    //engine.window->setUserFunction(UserFunc);
+
+    engine.window->addKeysListener(std::bind(&WestDuel::keyUpdate, this, std::placeholders::_1));
+    engine.window->addMouseListener(std::bind(&WestDuel::mouseUpdate, this, std::placeholders::_1, std::placeholders::_2));
 
     auto newObjects = mainWorld.loadObjects("rungholt/house.obj", "rungholt/", resources);
     while (newObjects != mainWorld.getObjects().end())
@@ -227,29 +149,6 @@ void WestDuel::logicalUpdate(float dt)
         lights[i + 1].m_position += glm::normalize(targetPositions[i] - lights[i + 1].m_position) * delta;
     }
 
-    bool wPressed = GetAsyncKeyState(0x57) & (1 << 16); // w
-    bool aPressed = GetAsyncKeyState(0x41) & (1 << 16); // a
-    bool sPressed = GetAsyncKeyState(0x53) & (1 << 16); // s
-    bool dPressed = GetAsyncKeyState(0x44) & (1 << 16); // d
-
-    if (wPressed)
-    {
-        g_mainCamera.moveForward(speed);
-    }
-    if (sPressed)
-    {
-        g_mainCamera.moveBackward(speed);
-    }
-
-    if (aPressed)
-    {
-        g_mainCamera.moveLeft(speed);
-    }
-
-    if (dPressed)
-    {
-        g_mainCamera.moveRight(speed);
-    }
     g_mainCamera.getPosition().y = 7.0f;
     g_mainCamera.updateView();
     m_engine.world->setCamera(g_mainCamera);
@@ -289,4 +188,68 @@ void WestDuel::logicalUpdate(float dt)
 
 void WestDuel::uiUpdate(float dt)
 {
+}
+
+void WestDuel::keyUpdate(const std::array<Window::KeyState, 256>& state)
+{
+    bool wPressed = state[(int)Window::Keys::W] == Window::KeyState::Down;
+    bool aPressed = state[(int)Window::Keys::A] == Window::KeyState::Down;
+    bool sPressed = state[(int)Window::Keys::S] == Window::KeyState::Down;
+    bool dPressed = state[(int)Window::Keys::D] == Window::KeyState::Down;
+    bool escPressed = state[(int)Window::Keys::Esc] == Window::KeyState::FirstDown;
+
+    if (escPressed)
+    {
+        m_inGame = !m_inGame;
+
+        if (!m_inGame)
+        {
+            m_engine.window->setStickCursorToCenter(false);
+            m_engine.window->setCursorVisibility(true);
+        }
+        else
+        {
+            m_engine.window->setStickCursorToCenter(true);
+            m_engine.window->setCursorVisibility(false);
+        }
+    }
+
+    float speed = 50.0f * 1.0f / 60.0f;
+    if (wPressed)
+    {
+        g_mainCamera.moveForward(speed);
+    }
+    if (sPressed)
+    {
+        g_mainCamera.moveBackward(speed);
+    }
+
+    if (aPressed)
+    {
+        g_mainCamera.moveLeft(speed);
+    }
+
+    if (dPressed)
+    {
+        g_mainCamera.moveRight(speed);
+    }
+
+}
+
+void WestDuel::mouseUpdate(const std::array<Window::KeyState, 3>& mouseKeys, const Window::MouseMove& mouseMove)
+{
+    const float dt = 1.0f / 60.0f;
+    if (m_inGame)
+    {
+        static float yaw = 0.0f;
+        static float pitch = 0.0f;
+
+        if (mouseMove.dx != 0.0f || mouseMove.dy != 0.0f)
+        {
+            yaw += -mouseMove.dx;
+            pitch += -mouseMove.dy;
+
+            g_mainCamera.rotate(pitch, yaw);
+        }
+    }
 }

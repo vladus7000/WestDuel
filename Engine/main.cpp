@@ -13,6 +13,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR lpCmdLin
 	World mainWorld;
 	Resources resources;
 	Renderer mainRenderer(mainWindow, resources);
+
 	mainRenderer.setWorld(&mainWorld);
 	mainWorld.initSun(resources);
 
@@ -34,7 +35,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR lpCmdLin
 	{
 		mainWorld.updateSun(dt);
 		mainWindow.peekMessages();
-
         game->logicalUpdate(dt);
         game->uiUpdate(dt);
 

@@ -17,9 +17,13 @@ protected:
     virtual void logicalUpdate(float dt) override;
     virtual void uiUpdate(float dt) override;
 
+    void keyUpdate(const std::array<Window::KeyState, 256>& state);
+    void mouseUpdate(const std::array<Window::KeyState, 3>& mouseKeys, const Window::MouseMove& mouseMove);
+
 private:
-    int m_zombieCount = 5;
-    int m_lightNumber = 50;
+    int m_zombieCount = 1;
+    int m_lightNumber = 10;
+    bool m_inGame = true;
     EngineComponents m_engine;
     std::vector<glm::vec3> targetPositions;
     glm::vec3 minBB = glm::vec3(FLT_MAX, FLT_MAX, FLT_MAX);
