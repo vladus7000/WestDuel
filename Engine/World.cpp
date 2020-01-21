@@ -10,6 +10,10 @@
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <Engine/ThirdParty/tiny_obj_loader.h>
 
+#include <Engine/ThirdParty/assimp/Importer.hpp>
+#include <Engine/ThirdParty/assimp/scene.h>
+#include <Engine/ThirdParty/assimp/postprocess.h>
+
 World::World()
 {
 	SettingsHolder::getInstance().addSetting(Settings::Type::World, new WorldSettings{});
@@ -65,6 +69,16 @@ std::vector<World::Mesh>::iterator World::loadObjects(const std::string& fileNam
 	}
 
 	return m_objects.begin() + oldSize;
+}
+
+void World::loadScene(const std::string & fileName, Resources & res)
+{
+    Assimp::Importer importer;
+
+    if (const aiScene* pScene = importer.ReadFile(fileName, aiProcess_Triangulate | aiProcess_ConvertToLeftHanded))
+    {
+
+    }
 }
 
 void World::initializeBuffers(Resources& resources)

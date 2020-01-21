@@ -44,6 +44,8 @@ public:
 
 	std::vector<Mesh>::iterator loadObjects(const std::string& fileName, const std::string& materialBaseDir, Resources& resources);
 
+    void loadScene(const std::string& fileName, Resources& res);
+
 	World(const World& rhs) = delete;
 	World(World&& rhs) = delete;
 	World& operator=(const World& rhs) = delete;

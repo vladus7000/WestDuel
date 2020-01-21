@@ -76,7 +76,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;$(ProjectDir)\Engine;$(ProjectDir)\Game;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;$(ProjectDir)\Engine;$(ProjectDir)\Game;E:\WestDuel\Engine\ThirdParty;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -85,11 +85,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;$(ProjectDir)\Engine;$(ProjectDir)\Game;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;$(ProjectDir)\Engine;$(ProjectDir)\Game;E:\WestDuel\Engine\ThirdParty;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x64</AdditionalLibraryDirectories>
-      <AdditionalDependencies>d3d11.lib;d3dx11d.lib;D3DCompiler.lib;dxerr.lib;dxgi.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x64;E:\WestDuel\Engine\ThirdParty\assimp\lib\Debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d11.lib;d3dx11d.lib;D3DCompiler.lib;dxerr.lib;dxgi.lib;dxguid.lib;assimp-vc140-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -100,7 +100,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;$(ProjectDir)\Engine;$(ProjectDir)\Game;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;$(ProjectDir)\Engine;$(ProjectDir)\Game;E:\WestDuel\Engine\ThirdParty;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -115,13 +115,13 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;$(ProjectDir)\Engine;$(ProjectDir)\Game;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;$(ProjectDir)\Engine;$(ProjectDir)\Game;E:\WestDuel\Engine\ThirdParty;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x64</AdditionalLibraryDirectories>
-      <AdditionalDependencies>d3d11.lib;d3dx11d.lib;D3DCompiler.lib;dxerr.lib;dxgi.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x64;E:\WestDuel\Engine\ThirdParty\assimp\lib\Release</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d11.lib;d3dx11d.lib;D3DCompiler.lib;dxerr.lib;dxgi.lib;dxguid.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -177,6 +177,83 @@
     <ClInclude Include="Engine\Settings\WorldSettings.hpp" />
     <ClInclude Include="Engine\Render\Shader.hpp" />
     <ClInclude Include="Engine\Render\Texture.hpp" />
+    <ClInclude Include="Engine\ThirdParty\assimp\aabb.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\ai_assert.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\anim.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\BaseImporter.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\Bitmap.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\BlobIOSystem.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\ByteSwapper.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\camera.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\cexport.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\cfileio.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\cimport.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\color4.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\commonMetaData.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\Compiler\poppack1.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\Compiler\pstdint.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\Compiler\pushpack1.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\config.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\CreateAnimMesh.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\DefaultIOStream.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\DefaultIOSystem.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\DefaultLogger.hpp" />
+    <ClInclude Include="Engine\ThirdParty\assimp\Defines.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\defs.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\Exceptional.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\Exporter.hpp" />
+    <ClInclude Include="Engine\ThirdParty\assimp\fast_atof.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\GenericProperty.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\Hash.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\Importer.hpp" />
+    <ClInclude Include="Engine\ThirdParty\assimp\importerdesc.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\IOStream.hpp" />
+    <ClInclude Include="Engine\ThirdParty\assimp\IOStreamBuffer.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\IOSystem.hpp" />
+    <ClInclude Include="Engine\ThirdParty\assimp\irrXMLWrapper.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\light.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\LineSplitter.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\LogAux.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\Logger.hpp" />
+    <ClInclude Include="Engine\ThirdParty\assimp\LogStream.hpp" />
+    <ClInclude Include="Engine\ThirdParty\assimp\material.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\MathFunctions.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\matrix3x3.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\matrix4x4.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\MemoryIOWrapper.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\mesh.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\metadata.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\NullLogger.hpp" />
+    <ClInclude Include="Engine\ThirdParty\assimp\ParsingUtils.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\pbrmaterial.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\port\AndroidJNI\AndroidJNIIOSystem.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\postprocess.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\Profiler.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\ProgressHandler.hpp" />
+    <ClInclude Include="Engine\ThirdParty\assimp\qnan.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\quaternion.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\RemoveComments.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\scene.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\SceneCombiner.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\SGSpatialSort.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\SkeletonMeshBuilder.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\SmoothingGroups.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\SpatialSort.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\StandardShapes.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\StreamReader.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\StreamWriter.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\StringComparison.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\StringUtils.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\Subdivision.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\texture.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\TinyFormatter.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\types.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\vector2.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\vector3.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\version.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\Vertex.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\XMLTools.h" />
+    <ClInclude Include="Engine\ThirdParty\assimp\ZipArchiveIOSystem.h" />
     <ClInclude Include="Engine\ThirdParty\stb_image.h" />
     <ClInclude Include="Engine\ThirdParty\tiny_obj_loader.h" />
     <ClInclude Include="Engine\UI\nuklear.h" />
@@ -187,6 +264,16 @@
     <ClInclude Include="Engine\Window.hpp" />
     <ClInclude Include="Engine\World.hpp" />
     <ClInclude Include="Game\WestDuel.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Engine\ThirdParty\assimp\color4.inl" />
+    <None Include="Engine\ThirdParty\assimp\material.inl" />
+    <None Include="Engine\ThirdParty\assimp\matrix3x3.inl" />
+    <None Include="Engine\ThirdParty\assimp\matrix4x4.inl" />
+    <None Include="Engine\ThirdParty\assimp\quaternion.inl" />
+    <None Include="Engine\ThirdParty\assimp\SmoothingGroups.inl" />
+    <None Include="Engine\ThirdParty\assimp\vector2.inl" />
+    <None Include="Engine\ThirdParty\assimp\vector3.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
