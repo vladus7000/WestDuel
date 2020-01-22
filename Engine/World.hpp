@@ -12,6 +12,9 @@
 
 #include <ThirdParty/glm/gtx/compatibility.hpp>
 #include <ThirdParty/tiny_obj_loader.h>
+#include <Engine/ThirdParty/assimp/Importer.hpp>
+#include <Engine/ThirdParty/assimp/scene.h>
+#include <Engine/ThirdParty/assimp/postprocess.h>
 
 class Resources;
 
@@ -71,6 +74,9 @@ public:
 private:
 	void initializeBuffers(Resources& resources);
 	void deinitializeBuffers();
+
+    void processNode(aiNode * node, const aiScene * scene, Resources& resources);
+    Mesh processMesh(aiMesh* mesh, const aiScene* scene, Resources& resources);
 
 private:
 	Camera m_camera;

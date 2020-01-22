@@ -10,10 +10,6 @@
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <Engine/ThirdParty/tiny_obj_loader.h>
 
-#include <Engine/ThirdParty/assimp/Importer.hpp>
-#include <Engine/ThirdParty/assimp/scene.h>
-#include <Engine/ThirdParty/assimp/postprocess.h>
-
 World::World()
 {
 	SettingsHolder::getInstance().addSetting(Settings::Type::World, new WorldSettings{});
@@ -73,11 +69,22 @@ std::vector<World::Mesh>::iterator World::loadObjects(const std::string& fileNam
 
 void World::loadScene(const std::string & fileName, Resources & res)
 {
+    auto device = res.getDevice();
+
+    auto foundIt = m_textures.find("defaultT");
+    if (foundIt == m_textures.end())
+    {
+        m_textures["defaultT"] = res.loadTexture("default.png", false);
+        m_textures["defaultN"] = res.loadTexture("defaultN.png", false);
+        m_textures["defaultR"] = res.loadTexture("defaultR.png", false);
+        m_textures["defaultM"] = res.loadTexture("defaultM.png", false);
+    }
+
     Assimp::Importer importer;
 
-    if (const aiScene* pScene = importer.ReadFile(fileName, aiProcess_Triangulate | aiProcess_ConvertToLeftHanded))
+    if (const aiScene* pScene = importer.ReadFile(fileName, aiProcess_Triangulate | aiProcess_CalcTangentSpace | aiProcess_ConvertToLeftHanded))
     {
-
+        processNode(pScene->mRootNode, pScene, res);
     }
 }
 
@@ -333,6 +340,169 @@ void World::deinitializeBuffers()
 		if (mesh.vert_vb) mesh.vert_vb->Release();
 	}
 	m_textures.clear();
+}
+
+void World::processNode(aiNode * node, const aiScene * scene, Resources& resources)
+{
+    for (UINT i = 0; i < node->mNumMeshes; i++)
+    {
+        aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+        m_objects.push_back(processMesh(mesh, scene, resources));
+    }
+
+    for (UINT i = 0; i < node->mNumChildren; i++)
+    {
+        processNode(node->mChildren[i], scene, resources);
+    }
+}
+
+World::Mesh World::processMesh(aiMesh * mesh, const aiScene * scen, Resources& resourcese)
+{
+    // Data to fill
+    //vector<VERTEX> vertices;
+    //vector<UINT> indices;
+    //vector<Texture> textures;
+
+    struct VERTEX
+    {
+        float x, y, z;
+    };
+
+    struct NORMAL
+    {
+        float x, y, z;
+    };
+
+    struct TCOORD
+    {
+        float u, v;
+    };
+
+    std::vector<VERTEX> vertices;
+    std::vector<NORMAL> normals;
+    std::vector<TCOORD> tcoords;
+    std::vector<unsigned int> indices;
+    //if (mesh->mMaterialIndex >= 0)
+    //{
+    //    aiMaterial* mat = scene->mMaterials[mesh->mMaterialIndex];
+    //
+    //    if (textype.empty()) textype = determineTextureType(scene, mat);
+    //}
+
+    // Walk through each of the mesh's vertices
+    for (UINT i = 0; i < mesh->mNumVertices; i++)
+    {
+        VERTEX vertex;
+        TCOORD texcoord;
+        NORMAL normal;
+
+        vertex.x = mesh->mVertices[i].x;
+        vertex.y = mesh->mVertices[i].y;
+        vertex.z = mesh->mVertices[i].z;
+
+        if (mesh->mTextureCoords[0])
+        {
+            texcoord.u = (float)mesh->mTextureCoords[0][i].x;
+            texcoord.v = (float)mesh->mTextureCoords[0][i].y;
+        }
+
+        if (mesh->mNormals)
+        {
+            normal.x = (float)mesh->mNormals[i].x;
+            normal.y = (float)mesh->mNormals[i].y;
+            normal.z = (float)mesh->mNormals[i].z;
+        }
+
+        vertices.push_back(vertex);
+        tcoords.push_back(texcoord);
+        normals.push_back(normal);
+    }
+
+    for (UINT i = 0; i < mesh->mNumFaces; i++)
+    {
+        aiFace face = mesh->mFaces[i];
+
+        for (UINT j = 0; j < face.mNumIndices; j++)
+            indices.push_back(face.mIndices[j]);
+    }
+
+    //if (mesh->mMaterialIndex >= 0)
+    //{
+    //    aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+    //
+    //    vector<Texture> diffuseMaps = this->loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse", scene);
+    //    textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+    //}
+
+    
+    Mesh ret;
+    ID3D11ShaderResourceView* diffuse = m_textures["defaultT"].m_SRV.Get();
+    ID3D11ShaderResourceView* normal = m_textures["defaultN"].m_SRV.Get();
+    ID3D11ShaderResourceView* rough = m_textures["defaultR"].m_SRV.Get();
+    ID3D11ShaderResourceView* metal = m_textures["defaultM"].m_SRV.Get();
+
+    ret.name = mesh->mName.C_Str();
+    ret.albedo = diffuse;
+    ret.rough = rough;
+    ret.metalness = metal;
+    ret.normal = normal;
+    ret.numIndices = indices.size();//indices.size();
+
+    auto device = resourcese.getDevice();
+
+    D3D11_BUFFER_DESC buffDesc;
+    buffDesc.ByteWidth = sizeof(unsigned int) * indices.size();
+    buffDesc.Usage = D3D11_USAGE_DEFAULT;
+    buffDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+    buffDesc.CPUAccessFlags = 0;
+    buffDesc.MiscFlags = 0;
+
+    D3D11_SUBRESOURCE_DATA subdata;
+    subdata.pSysMem = indices.data();
+    device->CreateBuffer(&buffDesc, &subdata, &ret.indexBuffer);
+    
+    /////
+    {
+        D3D11_BUFFER_DESC buffDesc;
+        buffDesc.ByteWidth = sizeof(VERTEX) * vertices.size();
+        buffDesc.Usage = D3D11_USAGE_DEFAULT;
+        buffDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+        buffDesc.CPUAccessFlags = 0;
+        buffDesc.MiscFlags = 0;
+
+        D3D11_SUBRESOURCE_DATA subdata;
+        subdata.pSysMem = vertices.data();
+        device->CreateBuffer(&buffDesc, &subdata, &ret.vert_vb);
+    }
+
+    {
+        D3D11_BUFFER_DESC buffDesc;
+        buffDesc.ByteWidth = sizeof(NORMAL) * normals.size();
+        buffDesc.Usage = D3D11_USAGE_DEFAULT;
+        buffDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+        buffDesc.CPUAccessFlags = 0;
+        buffDesc.MiscFlags = 0;
+
+        D3D11_SUBRESOURCE_DATA subdata;
+        subdata.pSysMem = normals.data();
+        device->CreateBuffer(&buffDesc, &subdata, &ret.norm_vb);
+    }
+
+    {
+        D3D11_BUFFER_DESC buffDesc;
+        buffDesc.ByteWidth = sizeof(TCOORD) * tcoords.size();
+        buffDesc.Usage = D3D11_USAGE_DEFAULT;
+        buffDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+        buffDesc.CPUAccessFlags = 0;
+        buffDesc.MiscFlags = 0;
+
+        D3D11_SUBRESOURCE_DATA subdata;
+        subdata.pSysMem = tcoords.data();
+        device->CreateBuffer(&buffDesc, &subdata, &ret.tcoords_vb);
+    }
+
+
+    return ret;
 }
 
 void World::addLight(Light l)

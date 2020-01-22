@@ -107,7 +107,16 @@ void GenerateGBuffer::execute(Renderer& renderer)
 		unsigned int offsets[] = { 0, 0, 0 };
 		ID3D11Buffer* buffers[] = { mesh.vert_vb, mesh.norm_vb, mesh.tcoords_vb };
 		context->IASetVertexBuffers(0, 3, buffers, stride, offsets);
-		context->Draw(mesh.numIndices, 0);
+        if (mesh.indexBuffer)
+        {
+            context->IASetIndexBuffer(mesh.indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+
+            context->DrawIndexed(mesh.numIndices, 0, 0);
+        }
+        else
+        {
+            context->Draw(mesh.numIndices, 0);
+        }
 
 		//context->IASetIndexBuffer(mesh.indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 		//context->DrawIndexed(mesh.numIndices, 0, 0);

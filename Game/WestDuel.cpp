@@ -36,6 +36,8 @@ void WestDuel::engineStared(EngineComponents engine)
     engine.window->addKeysListener(std::bind(&WestDuel::keyUpdate, this, std::placeholders::_1));
     engine.window->addMouseListener(std::bind(&WestDuel::mouseUpdate, this, std::placeholders::_1, std::placeholders::_2));
 
+    mainWorld.loadScene("Data/scene/scene.fbx", resources);
+
     auto newObjects = mainWorld.loadObjects("rungholt/house.obj", "rungholt/", resources);
     while (newObjects != mainWorld.getObjects().end())
     {
@@ -50,7 +52,7 @@ void WestDuel::engineStared(EngineComponents engine)
         maxBB.y = std::max(maxBB.y, newObjects->maxCoord.y);
         maxBB.z = std::max(maxBB.z, newObjects->maxCoord.z);
 
-        newObjects->worldMatrix = glm::scale(glm::vec3{ 3.0f, 3.0f, 3.0f });
+        newObjects->worldMatrix = glm::scale(glm::vec3{ 0.2f, 0.2f, 0.2f });
         ++newObjects;
     }
     minBB -= 50.0f;

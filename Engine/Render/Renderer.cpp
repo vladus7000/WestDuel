@@ -272,7 +272,17 @@ void Renderer::depthPrepass(const Camera& camera, Texture& tex, float x, float y
         unsigned int offsets[] = { 0, 0, 0 };
         ID3D11Buffer* buffers[] = { mesh.vert_vb, mesh.norm_vb, mesh.tcoords_vb };
         m_context->IASetVertexBuffers(0, 3, buffers, stride, offsets);
-        m_context->Draw(mesh.numIndices, 0);
+
+        if (mesh.indexBuffer)
+        {
+            m_context->IASetIndexBuffer(mesh.indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+
+            m_context->DrawIndexed(mesh.numIndices, 0, 0);
+        }
+        else
+        {
+            m_context->Draw(mesh.numIndices, 0);
+        }
     }
 
 	m_viewport.Width = (float)m_window.getWidth();
