@@ -251,7 +251,7 @@ void Renderer::depthPrepass(const Camera& camera, Texture& tex, float x, float y
 	m_viewport.TopLeftX = x;
 	m_viewport.TopLeftY = y;
 	m_context->RSSetViewports(1, &m_viewport);
-    for (auto& mesh : m_world->getObjects())
+    for (auto& mesh : m_world->getDrawable())
     {
         D3D11_MAPPED_SUBRESOURCE res;
         m_context->Map(m_depthPrepassCB, 0, D3D11_MAP_WRITE_DISCARD, 0, &res);
@@ -262,26 +262,26 @@ void Renderer::depthPrepass(const Camera& camera, Texture& tex, float x, float y
         };
         Data* buffer = reinterpret_cast<Data*>(res.pData);
 
-        glm::mat4 mvp = camera.getProjection() * camera.getView() * mesh.worldMatrix;
+        glm::mat4 mvp = camera.getProjection() * camera.getView() * mesh->worldMatrix;
 
         memcpy(buffer->mvp, &mvp[0][0], sizeof(float[16]));
-        memcpy(buffer->model, &(mesh.worldMatrix[0][0]), sizeof(float[16]));
+        memcpy(buffer->model, &(mesh->worldMatrix[0][0]), sizeof(float[16]));
         m_context->Unmap(m_depthPrepassCB, 0);
 
         unsigned int stride[] = { sizeof(float[3]), sizeof(float[3]) , sizeof(float[2]) };
         unsigned int offsets[] = { 0, 0, 0 };
-        ID3D11Buffer* buffers[] = { mesh.vert_vb, mesh.norm_vb, mesh.tcoords_vb };
+        ID3D11Buffer* buffers[] = { mesh->vert_vb, mesh->norm_vb, mesh->tcoords_vb };
         m_context->IASetVertexBuffers(0, 3, buffers, stride, offsets);
 
-        if (mesh.indexBuffer)
+        if (mesh->indexBuffer)
         {
-            m_context->IASetIndexBuffer(mesh.indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+            m_context->IASetIndexBuffer(mesh->indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
-            m_context->DrawIndexed(mesh.numIndices, 0, 0);
+            m_context->DrawIndexed(mesh->numIndices, 0, 0);
         }
         else
         {
-            m_context->Draw(mesh.numIndices, 0);
+            m_context->Draw(mesh->numIndices, 0);
         }
     }
 

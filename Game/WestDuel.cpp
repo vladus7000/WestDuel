@@ -37,7 +37,7 @@ void WestDuel::engineStared(EngineComponents engine)
     engine.window->addMouseListener(std::bind(&WestDuel::mouseUpdate, this, std::placeholders::_1, std::placeholders::_2));
 
     mainWorld.loadScene("Data/scene/scene.fbx", resources);
-
+/*
     auto newObjects = mainWorld.loadObjects("rungholt/house.obj", "rungholt/", resources);
     while (newObjects != mainWorld.getObjects().end())
     {
@@ -57,7 +57,7 @@ void WestDuel::engineStared(EngineComponents engine)
     }
     minBB -= 50.0f;
     maxBB += 50.0f;
-
+    */
     //auto groundObject = mainWorld.loadObjects("cube.obj", "", resources);
     //groundObject->worldMatrix = glm::scale(glm::vec3{ 800.0f, 0.1f, 800.0f });
     //groundObject->name = "ground";
@@ -65,10 +65,11 @@ void WestDuel::engineStared(EngineComponents engine)
     pistol = mainWorld.loadObjects("pistol/pistol.obj", "pistol/", resources);
 
     auto t = pistol;
-    while (t != mainWorld.getObjects().end())
+    while (t != mainWorld.getDrawable().end())
     {
-        t->name = "pistol";
-        t->worldMatrix = glm::translate(glm::vec3{ 0.0f, 5.0f, -40.0f }) * glm::scale(glm::vec3{ 15.0f, 15.0f, 15.0f });
+        auto ob = *t;
+        ob->name = "pistol";
+        ob->worldMatrix = glm::translate(glm::vec3{ 0.0f, 5.0f, -40.0f }) * glm::scale(glm::vec3{ 15.0f, 15.0f, 15.0f });
         ++t;
     }
 
@@ -92,6 +93,9 @@ void WestDuel::engineStared(EngineComponents engine)
         l.m_radius = radiuses(e2);
         mainWorld.addLight(l);
     }
+    /*
+    
+    
     zombie = mainWorld.loadObjects("zombie/0.obj", "zombie/", resources); // 5 shapes each
     for (int i = 0; i < m_zombieCount - 1; i++)
         mainWorld.loadObjects("zombie/0.obj", "zombie/", resources); // 5 shapes each
@@ -109,7 +113,7 @@ void WestDuel::engineStared(EngineComponents engine)
                 ++t_;
             }
         }
-    }
+    }*/
     g_mainCamera.setProjection(60.0f, (float)mainWindow.getWidth() / (float)mainWindow.getHeight(), 0.01f, 1000.f);
     g_mainCamera.setView({ 120, 60, 4 }, { 0, 0, 0 });
 
@@ -152,17 +156,19 @@ void WestDuel::logicalUpdate(float dt)
     }
 
     g_mainCamera.getPosition().y = 7.0f;
+    //g_mainCamera.setPosition(glm::vec3(535.863f, 45.5434f, -19.7955f));
     g_mainCamera.updateView();
     m_engine.world->setCamera(g_mainCamera);
 
     auto t = pistol;
     for (int i = 0; i < 4; i++)
     {
-        t->worldMatrix = glm::inverse(g_mainCamera.getView()) *glm::translate(glm::vec3(0.4f, -0.5f, 1.03f))*glm::rotate(glm::radians(90.0f), glm::vec3{ 0.0f, 1.0f, 0.0f })* glm::scale(glm::vec3{ 0.6f, 0.6f, 0.6f });// glm::translate(glm::vec3{ 0.0f, 5.0f, -40.0f }) *glm::rotate(glm::radians(angle), glm::vec3{ 0.0f, 1.0f, 0.0f }) * glm::scale(glm::vec3{ 15.0f, 15.0f, 15.0f });
+        auto ob = *t;
+        ob->worldMatrix = glm::inverse(g_mainCamera.getView()) *glm::translate(glm::vec3(0.4f, -0.5f, 1.03f))*glm::rotate(glm::radians(90.0f), glm::vec3{ 0.0f, 1.0f, 0.0f })* glm::scale(glm::vec3{ 0.6f, 0.6f, 0.6f });// glm::translate(glm::vec3{ 0.0f, 5.0f, -40.0f }) *glm::rotate(glm::radians(angle), glm::vec3{ 0.0f, 1.0f, 0.0f }) * glm::scale(glm::vec3{ 15.0f, 15.0f, 15.0f });
         ++t;
     }
 
-    {
+    if (0){
         std::uniform_real_distribution<> zombieR(-400.0f, 400.0f);
         auto t_ = zombie;
         float rx, ry;
@@ -172,7 +178,8 @@ void WestDuel::logicalUpdate(float dt)
             ry = zombieR(e2);
             for (int j = 0; j < 5; j++)
             {
-                glm::vec4 pos = t_->worldMatrix[3];
+                auto ob = *t_;
+                glm::vec4 pos = ob->worldMatrix[3];
 
                 if (glm::length(glm::vec3(pos.x, pos.y, pos.z) - g_mainCamera.getPosition()) > 0.5f)
                 {
@@ -181,7 +188,7 @@ void WestDuel::logicalUpdate(float dt)
                     pos.z += newPos.z;
                 }
 
-                t_->worldMatrix[3] = pos;
+                ob->worldMatrix[3] = pos;
                 ++t_;
             }
         }
@@ -216,7 +223,7 @@ void WestDuel::keyUpdate(const std::array<Window::KeyState, 256>& state)
         }
     }
 
-    float speed = 50.0f * 1.0f / 60.0f;
+    float speed = 20.0f * 1.0f / 60.0f;
     if (wPressed)
     {
         g_mainCamera.moveForward(speed);

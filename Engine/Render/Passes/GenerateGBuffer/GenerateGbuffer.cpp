@@ -80,7 +80,7 @@ void GenerateGBuffer::execute(Renderer& renderer)
 	ID3D11SamplerState* samplers[] = { m_sampler };
 	context->PSSetSamplers(0, 1, samplers);
 
-	for (auto& mesh : world.getObjects())
+	for (auto& mesh : world.getDrawable())
 	{
 		D3D11_MAPPED_SUBRESOURCE res;
 		context->Map(m_constantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &res);
@@ -93,29 +93,29 @@ void GenerateGBuffer::execute(Renderer& renderer)
 
 		auto& camera = renderer.getWorld().getCamera();
 
-		glm::mat4 mvp = camera.getProjection() * camera.getView() * mesh.worldMatrix;
+		glm::mat4 mvp = camera.getProjection() * camera.getView() * mesh->worldMatrix;
 	
 		//glm::mat4 model = glm::rotate(glm::radians(0.0f), glm::vec3{ 0.f, 1.f, 0.f }) * glm::scale(glm::vec3{ 1.0f, 1.0f, 1.0f });
 		memcpy(buffer->mvp, &mvp[0][0], sizeof(float[16]));
-		memcpy(buffer->model, &(mesh.worldMatrix[0][0]), sizeof(float[16]));
+		memcpy(buffer->model, &(mesh->worldMatrix[0][0]), sizeof(float[16]));
 		context->Unmap(m_constantBuffer, 0);
 
-		ID3D11ShaderResourceView* srvs[] = { mesh.albedo, mesh.normal, mesh.metalness, mesh.rough};
+		ID3D11ShaderResourceView* srvs[] = { mesh->albedo, mesh->normal, mesh->metalness, mesh->rough};
 		context->PSSetShaderResources(0, 4, srvs);
 
 		unsigned int stride[] = { sizeof(float[3]), sizeof(float[3]) , sizeof(float[2]) };
 		unsigned int offsets[] = { 0, 0, 0 };
-		ID3D11Buffer* buffers[] = { mesh.vert_vb, mesh.norm_vb, mesh.tcoords_vb };
+		ID3D11Buffer* buffers[] = { mesh->vert_vb, mesh->norm_vb, mesh->tcoords_vb };
 		context->IASetVertexBuffers(0, 3, buffers, stride, offsets);
-        if (mesh.indexBuffer)
+        if (mesh->indexBuffer)
         {
-            context->IASetIndexBuffer(mesh.indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+            context->IASetIndexBuffer(mesh->indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
-            context->DrawIndexed(mesh.numIndices, 0, 0);
+            context->DrawIndexed(mesh->numIndices, 0, 0);
         }
         else
         {
-            context->Draw(mesh.numIndices, 0);
+            context->Draw(mesh->numIndices, 0);
         }
 
 		//context->IASetIndexBuffer(mesh.indexBuffer, DXGI_FORMAT_R32_UINT, 0);

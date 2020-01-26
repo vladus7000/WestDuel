@@ -85,7 +85,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;$(ProjectDir)\Engine;$(ProjectDir)\Game;E:\WestDuel\Engine\ThirdParty;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;$(ProjectDir)\Engine;$(ProjectDir)\Game;E:\WestDuel\Engine\ThirdParty;E:\WestDuel\Engine\ThirdParty\Bullet;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x64;E:\WestDuel\Engine\ThirdParty\assimp\lib\Debug</AdditionalLibraryDirectories>
@@ -115,7 +115,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;$(ProjectDir)\Engine;$(ProjectDir)\Game;E:\WestDuel\Engine\ThirdParty;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;$(ProjectDir)\Engine;$(ProjectDir)\Game;E:\WestDuel\Engine\ThirdParty;E:\WestDuel\Engine\ThirdParty\Bullet;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -125,6 +125,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\Physics\Physics.cpp" />
     <ClCompile Include="Engine\Render\GBuffer.cpp" />
     <ClCompile Include="Engine\Render\Light.cpp" />
     <ClCompile Include="Engine\Render\Passes\Bloom\Bloom.cpp" />
@@ -143,6 +144,9 @@
     <ClCompile Include="Engine\Render\Resources.cpp" />
     <ClCompile Include="Engine\Render\Shader.cpp" />
     <ClCompile Include="Engine\Render\Texture.cpp" />
+    <ClCompile Include="Engine\ThirdParty\Bullet\btBulletCollisionAll.cpp" />
+    <ClCompile Include="Engine\ThirdParty\Bullet\btBulletDynamicsAll.cpp" />
+    <ClCompile Include="Engine\ThirdParty\Bullet\btLinearMathAll.cpp" />
     <ClCompile Include="Engine\UI\UI.cpp" />
     <ClCompile Include="Engine\Window.cpp" />
     <ClCompile Include="Engine\World.cpp" />
@@ -153,9 +157,13 @@
     <ClInclude Include="Engine\Application.hpp" />
     <ClInclude Include="Engine\Camera.hpp" />
     <ClInclude Include="Engine\Engine.hpp" />
+    <ClInclude Include="Engine\Object.hpp" />
+    <ClInclude Include="Engine\Physics\Physics.hpp" />
+    <ClInclude Include="Engine\Physics\PhysicsComponent.hpp" />
     <ClInclude Include="Engine\Render\ConstantBuffer.hpp" />
     <ClInclude Include="Engine\Render\GBuffer.hpp" />
     <ClInclude Include="Engine\Render\Light.hpp" />
+    <ClInclude Include="Engine\Render\MeshComponent.hpp" />
     <ClInclude Include="Engine\Render\Pass.hpp" />
     <ClInclude Include="Engine\Render\Passes\Bloom\Bloom.hpp" />
     <ClInclude Include="Engine\Render\Passes\FinalPost\FinalPost.hpp" />

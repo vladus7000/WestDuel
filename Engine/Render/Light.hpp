@@ -37,7 +37,7 @@ public:
 	Type m_type = Type::Directional;
 	float m_cutoff;
 	bool perspective = true;
-	float m_aspect = 800.0f / 600.0f;
+	float m_aspect = 600.0f / 800.0f;
 	bool enabled = true;
 	Camera m_camera;
 };

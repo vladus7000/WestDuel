@@ -10,10 +10,11 @@
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <Engine/ThirdParty/tiny_obj_loader.h>
 
-World::World()
+World::World(Physics* physics)
+    : m_physics(physics)
 {
 	SettingsHolder::getInstance().addSetting(Settings::Type::World, new WorldSettings{});
-	m_objects.reserve(100000);
+	m_drawable.reserve(100000);
 }
 
 World::~World()
@@ -24,7 +25,7 @@ World::~World()
 void World::initSun(Resources& resources)
 {
 	auto it = loadObjects("cube.obj", "", resources);
-	m_sunObject = &*it;
+	m_sunObject = *it;
 	m_sunObject->name = "sunObject_";
 	m_sunColorMorning = { 243.0f / 255.0f, 60.0f / 255.0f, 10.0f / 255.0f };
 	m_sunColorDay = { 252.0f / 255.0f, 212.0f / 255.0f, 64.0f / 255.0f };
@@ -40,7 +41,7 @@ void World::initSun(Resources& resources)
 	m_sunLight = &m_lights[0];
 }
 
-std::vector<World::Mesh>::iterator World::loadObjects(const std::string& fileName, const std::string& materialBaseDir, Resources& resources)
+std::vector<std::shared_ptr<Mesh>>::iterator World::loadObjects(const std::string& fileName, const std::string& materialBaseDir, Resources& resources)
 {
     const std::string DataDir("Data/");
 	std::string warn;
@@ -50,21 +51,21 @@ std::vector<World::Mesh>::iterator World::loadObjects(const std::string& fileNam
 	m_materials.clear();
 	tinyobj::LoadObj(&m_attrib, &m_shapes, &m_materials, &warn, &errs, (DataDir + fileName).c_str(), (DataDir + materialBaseDir).c_str(), true);
 
-	int oldSize = m_objects.size();
+	int oldSize = m_drawable.size();
 
 	initializeBuffers(resources);
 	m_materialBaseDir = "";
 
-	for (int i = 0; i < m_objects.size(); i++)
+	for (int i = 0; i < m_drawable.size(); i++)
 	{
-		if (m_objects[i].name == "sunObject_")
+		if (m_drawable[i]->name == "sunObject_")
 		{
-			m_sunObject = &m_objects[i];
+			m_sunObject = m_drawable[i];
 			break;
 		}
 	}
 
-	return m_objects.begin() + oldSize;
+	return m_drawable.begin() + oldSize;
 }
 
 void World::loadScene(const std::string & fileName, Resources & res)
@@ -82,9 +83,9 @@ void World::loadScene(const std::string & fileName, Resources & res)
 
     Assimp::Importer importer;
 
-    if (const aiScene* pScene = importer.ReadFile(fileName, aiProcess_Triangulate | aiProcess_CalcTangentSpace | aiProcess_ConvertToLeftHanded))
+    if (const aiScene* pScene = importer.ReadFile(fileName, aiProcess_GenBoundingBoxes | aiProcess_Triangulate | aiProcess_CalcTangentSpace | aiProcess_ConvertToLeftHanded))
     {
-        processNode(pScene->mRootNode, pScene, res);
+        processNode(m_root, pScene->mRootNode, pScene, res);
     }
 }
 
@@ -203,7 +204,6 @@ void World::initializeBuffers(Resources& resources)
 			tcoords.push_back(tc[2][0]);
 			tcoords.push_back(tc[2][1]);
 		}
-		m_objects.push_back({});
 
 		ID3D11ShaderResourceView* diffuse = m_textures["defaultT"].m_SRV.Get();
 		ID3D11ShaderResourceView* normal = m_textures["defaultN"].m_SRV.Get();
@@ -267,15 +267,17 @@ void World::initializeBuffers(Resources& resources)
 			}
 
 		}
-		auto& ob = m_objects.back();
-		ob.maxCoord = maxPoint;
-		ob.minCoord = minPoint;
-		ob.name = shape.name;
-		ob.albedo = diffuse;
-		ob.rough = rough;
-		ob.metalness = metal;
-		ob.normal = normal;
-		ob.numIndices = mesh.indices.size();//indices.size();
+		auto ob = std::make_shared<Mesh>();
+		ob->maxCoord = maxPoint;
+		ob->minCoord = minPoint;
+		ob->name = shape.name;
+		ob->albedo = diffuse;
+		ob->rough = rough;
+		ob->metalness = metal;
+		ob->normal = normal;
+		ob->numIndices = mesh.indices.size();//indices.size();
+
+        m_drawable.push_back(ob);
 		/*D3D11_BUFFER_DESC buffDesc;
 		buffDesc.ByteWidth = sizeof(unsigned int) * indices.size();
 		buffDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -298,7 +300,7 @@ void World::initializeBuffers(Resources& resources)
 
 			D3D11_SUBRESOURCE_DATA subdata;
 			subdata.pSysMem = vertices.data();
-			device->CreateBuffer(&buffDesc, &subdata, &ob.vert_vb);
+			device->CreateBuffer(&buffDesc, &subdata, &ob->vert_vb);
 		}
 
 		{
@@ -311,7 +313,7 @@ void World::initializeBuffers(Resources& resources)
 
 			D3D11_SUBRESOURCE_DATA subdata;
 			subdata.pSysMem = normals.data();
-			device->CreateBuffer(&buffDesc, &subdata, &ob.norm_vb);
+			device->CreateBuffer(&buffDesc, &subdata, &ob->norm_vb);
 		}
 
 		{
@@ -324,7 +326,7 @@ void World::initializeBuffers(Resources& resources)
 
 			D3D11_SUBRESOURCE_DATA subdata;
 			subdata.pSysMem = tcoords.data();
-			device->CreateBuffer(&buffDesc, &subdata, &ob.tcoords_vb);
+			device->CreateBuffer(&buffDesc, &subdata, &ob->tcoords_vb);
 		}
 		/////
 	}
@@ -332,37 +334,64 @@ void World::initializeBuffers(Resources& resources)
 
 void World::deinitializeBuffers()
 {
-	for (auto& mesh : m_objects)
+	for (auto& mesh : m_drawable)
 	{
-		if (mesh.indexBuffer) mesh.indexBuffer->Release();
-		if (mesh.norm_vb) mesh.norm_vb->Release();
-		if (mesh.tcoords_vb) mesh.tcoords_vb->Release();
-		if (mesh.vert_vb) mesh.vert_vb->Release();
+		if (mesh->indexBuffer) mesh->indexBuffer->Release();
+		if (mesh->norm_vb) mesh->norm_vb->Release();
+		if (mesh->tcoords_vb) mesh->tcoords_vb->Release();
+		if (mesh->vert_vb) mesh->vert_vb->Release();
 	}
 	m_textures.clear();
 }
 
-void World::processNode(aiNode * node, const aiScene * scene, Resources& resources)
+void World::processNode(std::shared_ptr<Object> root, aiNode * node, const aiScene * scene, Resources& resources)
 {
     for (UINT i = 0; i < node->mNumMeshes; i++)
     {
+        auto newChild = std::make_shared<Object>(node->mName.C_Str());
+        root->addChild(newChild);
+        newChild->setRoot(root);
+
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-        m_objects.push_back(processMesh(mesh, scene, resources));
+
+        int type = 0; // 0 = render, 1 = physics
+        if (node->mMetaData)
+        {
+            float res = 0.0f;
+            aiString name("type");
+            node->mMetaData->Get(name, res);
+            type = static_cast<int>(res);
+        }
+
+        std::shared_ptr<Mesh> newMesh;
+        std::shared_ptr<Component> newPhysics;
+
+        newMesh = processMesh(mesh, scene, resources);
+        newChild->setName(newMesh->name);
+        m_drawable.push_back(newMesh);
+        newMesh->setOwner(newChild);
+        newChild->addComponent(newMesh);
+
+        if (type == 1)
+        {
+            newPhysics = processPhysics(mesh, scene, resources);
+            newPhysics->setOwner(newChild);
+            newChild->addComponent(newPhysics);
+        }
     }
 
     for (UINT i = 0; i < node->mNumChildren; i++)
     {
-        processNode(node->mChildren[i], scene, resources);
+        auto newChild = std::make_shared<Object>(node->mName.C_Str());
+        root->addChild(newChild);
+        newChild->setRoot(root);
+
+        processNode(newChild, node->mChildren[i], scene, resources);
     }
 }
 
-World::Mesh World::processMesh(aiMesh * mesh, const aiScene * scen, Resources& resourcese)
+std::shared_ptr<Mesh> World::processMesh(aiMesh * mesh, const aiScene * scen, Resources& resourcese)
 {
-    // Data to fill
-    //vector<VERTEX> vertices;
-    //vector<UINT> indices;
-    //vector<Texture> textures;
-
     struct VERTEX
     {
         float x, y, z;
@@ -435,18 +464,21 @@ World::Mesh World::processMesh(aiMesh * mesh, const aiScene * scen, Resources& r
     //}
 
     
-    Mesh ret;
+    auto ret = std::make_shared<Mesh>();
     ID3D11ShaderResourceView* diffuse = m_textures["defaultT"].m_SRV.Get();
     ID3D11ShaderResourceView* normal = m_textures["defaultN"].m_SRV.Get();
     ID3D11ShaderResourceView* rough = m_textures["defaultR"].m_SRV.Get();
     ID3D11ShaderResourceView* metal = m_textures["defaultM"].m_SRV.Get();
 
-    ret.name = mesh->mName.C_Str();
-    ret.albedo = diffuse;
-    ret.rough = rough;
-    ret.metalness = metal;
-    ret.normal = normal;
-    ret.numIndices = indices.size();//indices.size();
+    ret->name = mesh->mName.C_Str();
+    ret->albedo = diffuse;
+    ret->rough = rough;
+    ret->metalness = metal;
+    ret->normal = normal;
+    ret->numIndices = indices.size();//indices.size();
+    ret->name = mesh->mName.C_Str();
+    ret->minCoord = glm::vec3(mesh->mAABB.mMin.x, mesh->mAABB.mMin.y, mesh->mAABB.mMin.z);
+    ret->maxCoord = glm::vec3(mesh->mAABB.mMax.x, mesh->mAABB.mMax.y, mesh->mAABB.mMax.z);
 
     auto device = resourcese.getDevice();
 
@@ -459,7 +491,7 @@ World::Mesh World::processMesh(aiMesh * mesh, const aiScene * scen, Resources& r
 
     D3D11_SUBRESOURCE_DATA subdata;
     subdata.pSysMem = indices.data();
-    device->CreateBuffer(&buffDesc, &subdata, &ret.indexBuffer);
+    device->CreateBuffer(&buffDesc, &subdata, &ret->indexBuffer);
     
     /////
     {
@@ -472,7 +504,7 @@ World::Mesh World::processMesh(aiMesh * mesh, const aiScene * scen, Resources& r
 
         D3D11_SUBRESOURCE_DATA subdata;
         subdata.pSysMem = vertices.data();
-        device->CreateBuffer(&buffDesc, &subdata, &ret.vert_vb);
+        device->CreateBuffer(&buffDesc, &subdata, &ret->vert_vb);
     }
 
     {
@@ -485,7 +517,7 @@ World::Mesh World::processMesh(aiMesh * mesh, const aiScene * scen, Resources& r
 
         D3D11_SUBRESOURCE_DATA subdata;
         subdata.pSysMem = normals.data();
-        device->CreateBuffer(&buffDesc, &subdata, &ret.norm_vb);
+        device->CreateBuffer(&buffDesc, &subdata, &ret->norm_vb);
     }
 
     {
@@ -498,9 +530,20 @@ World::Mesh World::processMesh(aiMesh * mesh, const aiScene * scen, Resources& r
 
         D3D11_SUBRESOURCE_DATA subdata;
         subdata.pSysMem = tcoords.data();
-        device->CreateBuffer(&buffDesc, &subdata, &ret.tcoords_vb);
+        device->CreateBuffer(&buffDesc, &subdata, &ret->tcoords_vb);
     }
 
+    return ret;
+}
+
+std::shared_ptr<PhysicsComponent> World::processPhysics(aiMesh * mesh, const aiScene * scene, Resources & resources)
+{
+    auto ret = std::make_shared<PhysicsComponent>();
+
+    ret->minCoord = glm::vec3(mesh->mAABB.mMin.x, mesh->mAABB.mMin.y, mesh->mAABB.mMin.z);
+    ret->maxCoord = glm::vec3(mesh->mAABB.mMax.x, mesh->mAABB.mMax.y, mesh->mAABB.mMax.z);
+
+    m_physics->addPhysicsBody(ret);
 
     return ret;
 }

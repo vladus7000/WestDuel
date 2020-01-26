@@ -70,6 +70,18 @@
     <ClCompile Include="Game\WestDuel.cpp">
       <Filter>Game</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Physics\Physics.cpp">
+      <Filter>Engine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\ThirdParty\Bullet\btBulletCollisionAll.cpp">
+      <Filter>Engine\ThirdParty\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\ThirdParty\Bullet\btBulletDynamicsAll.cpp">
+      <Filter>Engine\ThirdParty\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\ThirdParty\Bullet\btLinearMathAll.cpp">
+      <Filter>Engine\ThirdParty\Bullet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Settings\RenderSettings.hpp">
@@ -414,6 +426,18 @@
     <ClInclude Include="Engine\ThirdParty\assimp\RemoveComments.h">
       <Filter>Engine\ThirdParty\assimp</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Physics\Physics.hpp">
+      <Filter>Engine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Object.hpp">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Physics\PhysicsComponent.hpp">
+      <Filter>Engine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\MeshComponent.hpp">
+      <Filter>Engine\Render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -475,6 +499,9 @@
     </Filter>
     <Filter Include="Engine\ThirdParty\assimp">
       <UniqueIdentifier>{e814ca36-c30e-436e-be05-aa96b4462a76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\ThirdParty\Bullet">
+      <UniqueIdentifier>{8f1b5c85-cf7b-4419-84be-de078f3adca2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

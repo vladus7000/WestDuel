@@ -6,9 +6,13 @@
 
 #include <d3d11.h>
 
-#include <Camera.hpp>
-#include <Render/Texture.hpp>
-#include <Render/Light.hpp>
+#include <Engine/Camera.hpp>
+#include <Engine/Render/Texture.hpp>
+#include <Engine/Render/Light.hpp>
+#include <Engine/Object.hpp>
+#include <Engine/Physics/Physics.hpp>
+#include <Engine/Physics/PhysicsComponent.hpp>
+#include <Engine/Render/MeshComponent.hpp>
 
 #include <ThirdParty/glm/gtx/compatibility.hpp>
 #include <ThirdParty/tiny_obj_loader.h>
@@ -21,31 +25,12 @@ class Resources;
 class World
 {
 public:
-	struct Mesh
-	{
-		ID3D11Buffer* vert_vb;
-		ID3D11Buffer* norm_vb;
-		ID3D11Buffer* tcoords_vb;
-		ID3D11Buffer* indexBuffer = nullptr;
-
-		//Separate to material
-		ID3D11ShaderResourceView* albedo = nullptr;
-		ID3D11ShaderResourceView* normal = nullptr;
-		ID3D11ShaderResourceView* metalness = nullptr;
-		ID3D11ShaderResourceView* rough = nullptr;
-		int numIndices = 0;
-		std::string name;
-		glm::mat4 worldMatrix = glm::mat4(1.0f);
-		glm::vec3 minCoord = glm::vec3(FLT_MAX, FLT_MAX, FLT_MAX);
-		glm::vec3 maxCoord = glm::vec3(FLT_MIN, FLT_MIN, FLT_MIN);
-	};
-
-	World();
+	World(Physics* physics);
 	~World();
 
 	void initSun(Resources& resources);
 
-	std::vector<Mesh>::iterator loadObjects(const std::string& fileName, const std::string& materialBaseDir, Resources& resources);
+	std::vector<std::shared_ptr<Mesh>>::iterator loadObjects(const std::string& fileName, const std::string& materialBaseDir, Resources& resources);
 
     void loadScene(const std::string& fileName, Resources& res);
 
@@ -57,8 +42,8 @@ public:
 	void setCamera(Camera cam) { m_camera = cam; }
 	Camera& getCamera() { return m_camera; }
 
-	const std::vector<Mesh>& getObjects() const { return m_objects; }
-	std::vector<Mesh>& getObjects() { return m_objects; }
+	const std::vector<std::shared_ptr<Mesh>>& getDrawable() const { return m_drawable; }
+	std::vector<std::shared_ptr<Mesh>>& getDrawable() { return m_drawable; }
 
 	void addLight(Light l);
 	std::vector<Light>& getLights() { return m_lights; }
@@ -75,24 +60,28 @@ private:
 	void initializeBuffers(Resources& resources);
 	void deinitializeBuffers();
 
-    void processNode(aiNode * node, const aiScene * scene, Resources& resources);
-    Mesh processMesh(aiMesh* mesh, const aiScene* scene, Resources& resources);
+    void processNode(std::shared_ptr<Object> root, aiNode * node, const aiScene * scene, Resources& resources);
+    std::shared_ptr<Mesh> processMesh(aiMesh* mesh, const aiScene* scene, Resources& resources);
+    std::shared_ptr<PhysicsComponent> processPhysics(aiMesh* mesh, const aiScene* scene, Resources& resources);
 
 private:
 	Camera m_camera;
 	tinyobj::attrib_t m_attrib;
 	std::vector<tinyobj::shape_t> m_shapes;
 	std::vector<tinyobj::material_t> m_materials;
-	std::vector<Mesh> m_objects;
+	std::vector<std::shared_ptr<Mesh>> m_drawable;
 	std::vector<Light> m_lights;
+    std::shared_ptr<Object> m_root = std::make_shared<Object>();
 
 	std::map<std::string, Texture> m_textures;
 	std::string m_materialBaseDir;
 
-	Mesh* m_sunObject;
+    std::shared_ptr<Mesh> m_sunObject;
 	Light* m_sunLight;
 	bool m_isDay = true;
 	float m_sunAngle = 0.0f;
 	glm::vec3 m_sunColorMorning;
 	glm::vec3 m_sunColorDay;
+
+    Physics* m_physics;
 };

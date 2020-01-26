@@ -26,9 +26,9 @@ private:
     bool m_inGame = true;
     EngineComponents m_engine;
     std::vector<glm::vec3> targetPositions;
-    glm::vec3 minBB = glm::vec3(FLT_MAX, FLT_MAX, FLT_MAX);
-    glm::vec3 maxBB = glm::vec3(FLT_MIN, FLT_MIN, FLT_MIN);
+    glm::vec3 minBB = glm::vec3(-100.0f, -100.0f, -100.0f);
+    glm::vec3 maxBB = glm::vec3(100.0f, 100.0f, 100.0f);
 
-    std::vector<World::Mesh>::iterator pistol;
-    std::vector<World::Mesh>::iterator zombie;
+    std::vector<std::shared_ptr<Mesh>>::iterator pistol;
+    std::vector<std::shared_ptr<Mesh>>::iterator zombie;
 };

@@ -3,6 +3,7 @@
 #include <Engine/World.hpp>
 #include <Engine/Render/Renderer.hpp>
 #include <Engine/Render/Resources.hpp>
+#include <Engine/Physics/Physics.hpp>
 #include <Engine/UI/UI.hpp>
 
 CREATE_GAME_DECL;
@@ -10,7 +11,8 @@ CREATE_GAME_DECL;
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR lpCmdLine, int nCmdShow)
 {
 	Window mainWindow(800, 600, hInstance);
-	World mainWorld;
+    Physics physic;
+	World mainWorld(&physic);
 	Resources resources;
 	Renderer mainRenderer(mainWindow, resources);
 
@@ -26,6 +28,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR lpCmdLin
     components.resources = &resources;
     components.window = &mainWindow;
     components.world = &mainWorld;
+    components.physics = &physic;
 
     game->engineStared(components);
 
@@ -38,6 +41,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR lpCmdLin
         game->logicalUpdate(dt);
         game->uiUpdate(dt);
 
+        physic.step();
+        physic.syncPhysicsTransformToRenderables();
 		mainRenderer.beginFrame();
 		mainRenderer.drawFrame(dt);
 		uiDraw();
