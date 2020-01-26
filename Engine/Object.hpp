@@ -5,6 +5,8 @@
 #include <memory>
 #include <map>
 
+#include <ThirdParty/glm/gtx/compatibility.hpp>
+
 class Object;
 
 class Component
@@ -86,6 +88,7 @@ public:
         m_components[type].push_back(c);
     }
 
+    glm::mat4 m_transform = glm::mat4(1.0f);
 private:
     std::string m_name;
     std::vector<std::shared_ptr<Object>> m_childs;

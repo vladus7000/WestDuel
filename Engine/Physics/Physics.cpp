@@ -2,6 +2,7 @@
 #include <Engine\Render\MeshComponent.hpp>
 #include <ThirdParty/glm/gtc/matrix_transform.hpp>
 #include <ThirdParty/glm/gtx/transform.hpp>
+#include <glm/gtx/matrix_decompose.hpp>
 
 Physics::Physics()
 {
@@ -43,7 +44,16 @@ Physics::~Physics()
 
 void Physics::addPhysicsBody(std::shared_ptr<PhysicsComponent> component)
 {
-    btCollisionShape* colShape = new btSphereShape(btScalar(1.));
+    btCollisionShape* colShape = nullptr;
+    if (component->bb_type == 0)
+    {
+        colShape = new btSphereShape(btScalar(1.));
+    }
+    else
+    {
+        glm::vec3 half = (component->maxCoord - component->minCoord) / 2.0f;
+        colShape = new btBoxShape(btVector3(half.x, half.y, half.z));
+    }
     m_collisionShapes.push_back(colShape);
 
 
@@ -51,7 +61,7 @@ void Physics::addPhysicsBody(std::shared_ptr<PhysicsComponent> component)
     btTransform startTransform;
     startTransform.setIdentity();
 
-    btScalar mass(0.4f);
+    btScalar mass(component->mass);
 
     //rigidbody is dynamic if and only if mass is non zero, otherwise static
     bool isDynamic = (mass != 0.f);
@@ -60,8 +70,14 @@ void Physics::addPhysicsBody(std::shared_ptr<PhysicsComponent> component)
     if (isDynamic)
         colShape->calculateLocalInertia(mass, localInertia);
 
-    glm::vec3 center = (component->maxCoord + component->minCoord) / 2.0f;
-    startTransform.setOrigin(btVector3(center.x, center.y, center.z));
+    glm::vec3 scale;
+    glm::quat rotation;
+    glm::vec3 translation;
+    glm::vec3 skew;
+    glm::vec4 perspective;
+    glm::decompose(component->worldMatrix, scale, rotation, translation, skew, perspective);
+
+    startTransform.setOrigin(btVector3(translation.x, translation.y, translation.z));
 
     //using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
     btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
@@ -93,7 +109,7 @@ void Physics::syncPhysicsTransformToRenderables()
             trans = obj->getWorldTransform();
         }
 
-        if (Component* component = (Mesh*)body->getUserPointer())
+        if (Component* component = (Component*)body->getUserPointer())
         {
             auto& meshes = component->getOwner()->getComponents(Component::Type::Renderable);
             for (auto& meshComponent : meshes)

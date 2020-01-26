@@ -62,7 +62,7 @@ private:
 
     void processNode(std::shared_ptr<Object> root, aiNode * node, const aiScene * scene, Resources& resources);
     std::shared_ptr<Mesh> processMesh(aiMesh* mesh, const aiScene* scene, Resources& resources);
-    std::shared_ptr<PhysicsComponent> processPhysics(aiMesh* mesh, const aiScene* scene, Resources& resources);
+    std::shared_ptr<PhysicsComponent> processPhysics(aiMesh* mesh, aiNode * node, const aiScene* scene, Resources& resources);
 
 private:
 	Camera m_camera;

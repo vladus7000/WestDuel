@@ -372,9 +372,15 @@ void World::processNode(std::shared_ptr<Object> root, aiNode * node, const aiSce
         newMesh->setOwner(newChild);
         newChild->addComponent(newMesh);
 
+        memcpy(&newChild->m_transform, &node->mTransformation[0][0], sizeof(float[16]));
+        memcpy(&newMesh->worldMatrix, &node->mTransformation[0][0], sizeof(float[16]));
+
+        newChild->m_transform = glm::transpose(newChild->m_transform);
+        newMesh->worldMatrix = glm::transpose(newMesh->worldMatrix);
+
         if (type == 1)
         {
-            newPhysics = processPhysics(mesh, scene, resources);
+            newPhysics = processPhysics(mesh, node, scene, resources);
             newPhysics->setOwner(newChild);
             newChild->addComponent(newPhysics);
         }
@@ -536,12 +542,31 @@ std::shared_ptr<Mesh> World::processMesh(aiMesh * mesh, const aiScene * scen, Re
     return ret;
 }
 
-std::shared_ptr<PhysicsComponent> World::processPhysics(aiMesh * mesh, const aiScene * scene, Resources & resources)
+std::shared_ptr<PhysicsComponent> World::processPhysics(aiMesh * mesh, aiNode * node, const aiScene * scene, Resources & resources)
 {
     auto ret = std::make_shared<PhysicsComponent>();
 
     ret->minCoord = glm::vec3(mesh->mAABB.mMin.x, mesh->mAABB.mMin.y, mesh->mAABB.mMin.z);
     ret->maxCoord = glm::vec3(mesh->mAABB.mMax.x, mesh->mAABB.mMax.y, mesh->mAABB.mMax.z);
+
+    memcpy(&ret->worldMatrix, &node->mTransformation[0][0], sizeof(float[16]));
+    ret->worldMatrix = glm::transpose(ret->worldMatrix);
+
+    if (node->mMetaData)
+    {
+        float res = 0.0f;
+        {
+            aiString name("bb_type");
+            node->mMetaData->Get(name, res);
+            ret->bb_type = static_cast<int>(res);
+        }
+
+        {
+            aiString name("mass");
+            node->mMetaData->Get(name, res);
+            ret->mass = res;
+        }
+    }
 
     m_physics->addPhysicsBody(ret);
 
